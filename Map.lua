@@ -214,31 +214,30 @@ Public License instead of this License.
 
 
 --[[
-说明:
-	在TabList 的基础上, 改造出TabMap, 
-	元素少的情况下, 也可以适当频繁插入/删除(最好就不要频繁插入/删除)
+目标:
+	利用linklist + key + value, 实现可以'频繁删除&插入'的mult map(只有在频繁增删的情况下有优势)
 
-	可以批量插入元素, 可以批量导出元素
+	不能批量插入/删除
 
 	不允许相同的key键值
---]]
+]]
 
 
 
-local TabMMap = require "TabMMap"
+local MMap = require "MMap"
 
-local TabMap = {}
+local Map = {}
 
-TabMap.__index = TabMap
+Map.__index = Map
 
---创建map(keyType = number/string/anything)
---成功返回table, 失败返回nil
---[自己保证元素的一致性, 否则没办法排序]
-function TabMap:New( keyType )
+
+
+--创建链表(自己保证元素的一致性, 否则没办法排序)
+function Map:New( keyType )
 	local t = {}
 	local Setmetatable = setmetatable
-	t.TabMMap = TabMMap:New(keyType)
-	if t.TabMMap == nil then
+	t.MMap = MMap:New(keyType)
+	if t.MMap == nil then
 		return nil
 	else
 		Setmetatable(t, self)
@@ -247,189 +246,158 @@ function TabMap:New( keyType )
 	end
 end
 
---查看队头元素(不操作, 只查看)
---成功返回'Front节点', 失败返回nil
-function TabMap:Front()
-	return self.TabMMap:Front()
+--返回第一个元素
+--成功返回节点的key+val, 失败返回nil
+function Map:Front()
+	return self.MMap:Front()
 end
 
---查看队尾元素(不操作, 只查看)
---成功返回'Back节点', 失败返回nil
-function TabMap:Back()
-	return self.TabMMap:Back()
+--返回最后一个元素
+--成功返回节点的key+val, 失败返回nil
+function Map:Back()
+	return self.MMap:Back()
 end
 
---从Back队尾插入
---成功返回true, 失败返回false(debug only)
-function TabMap:PushBack( key, val )
+--从Map头部插入元素
+function Map:PushFront( key, val )
 	--TabSet 不允许重复元素
-	local tmp = self.TabMMap:FindNode(key)
+	local tmp = self.MMap:Find(key)
 	if tmp == nil then
-		self.TabMMap:PushBack(key, val)
+		self.MMap:PushFront(key, val)
 	end
 end
 
---从Back队尾弹出
---成功返回'Back节点', 失败返回nil
-function TabMap:PopBack()
-	return self.TabMMap:PopBack()
-end
-
---从Front队头插入
---成功返回true, 失败返回false(debug only)
-function TabMap:PushFront( key, val )
+--从Map尾部插入元素
+function Map:PushBack( key, val )
 	--TabSet 不允许重复元素
-	local tmp = self.TabMMap:FindNode(key)
+	local tmp = self.MMap:Find(key)
 	if tmp == nil then
-		self.TabMMap:PushFront(key, val)
+		self.MMap:PushBack(key, val)
 	end
 end
 
---从Front队头弹出
---成功返回'Front节点', 失败返回nil
-function TabMap:PopFront()
-	return self.TabMMap:PopFront()
+--从Map头部弹出元素
+--成功返回节点的val元素值, 失败返回nil
+function Map:PopFront()
+	return self.MMap:PopFront()
 end
 
---栈空?
---成功返回true, 失败返回false
-function TabMap:Empty()
-	return self.TabMMap:Empty()
+--从Map尾部弹出元素
+--成功返回节点的val元素值, 失败返回nil
+function Map:PopBack()
+	return self.MMap:PopBack()
 end
 
---返回栈当前元素的长度
-function TabMap:Count()
-	return self.TabMMap:Count()
+--根据key, 查询元素是否存在, 存在则返回'第一个找到的元素'的node节点
+--成功返回目标节点node, 失败返回nil
+function Map:Find( key )
+	return self.MMap:Find(key)
 end
 
---清空(重置)
-function TabMap:Clear()
-	self.TabMMap:Clear()
-end
-
---交换元素
-function TabMap:Swap(x,y)
-	self.TabMMap:Swap(x,y)
-end
-
---重新排序, 打乱TabMap 原来的顺序[先进先出TabMap禁用](直接使用table.sort()进行排序)
-function TabMap:Sort()
-	self.TabMMap:Sort()
-end
-
---洗牌乱序, 打乱TabMap 原来的顺序, 随机排序(anything 也可以乱序)
-function TabMap:Shuffle()
-	self.TabMMap:Shuffle()
-end
-
---查找key(不是pop, 只查找, 不删除)
---成功返回'key指向的节点', 失败返回nil
-function TabMap:FindNode( key )
-	return self.TabMMap:FindNode(key)
-end
-
---查找val
---成功返回'val指向的节点', 失败返回nil
-function TabMap:FindNodeByVal( val )
-	return self.TabMMap:FindNodeByVal(val)
-end
-
---查找Pos指向的node
---成功返回'pos指向的节点', 失败返回nil
-function TabMap:FindNodeByPos( pos )
-	return self.TabMMap:FindNodeByPos(pos)
-end
-
---根据Key, 返回Key所在的Pos
+--根据Key, 返回Key所在的tmp table的Pos位置(绝对有问题)
 --成功返回'key 节点的pos', 失败返回nil
-function TabMap:GetKeyPos( key )
-	return self.TabMMap:GetKeyPos(key)
+function Map:GetKeyPosInTable( Tab, Len, key )
+	return self.MMap:GetKeyPosInTable(Tab, Len, key)
 end
 
---根据Pos 位置值, 插入元素(触发table重新排序)
-function TabMap:InsertPos( pos, key, val )
+--队列空?
+--成功返回true, 失败返回false
+function Map:Empty()
+	return self.MMap:Empty()
+end
+
+--返回Map长度
+function Map:Count()
+	return self.MMap:Count()
+end
+
+--清空
+function Map:Clear()
+	self.MMap:Clear()
+end
+
+--根据key 值, 查找与该key 值匹配的'第一个找到的元素', 然后删除
+function Map:Remove( key )
+	self.MMap:Remove(key)
+end
+
+--根据key 值, 查找与该key 值匹配的'第一个找到的元素', 然后在其后一位插入元素
+--找不到, 则自动在队尾添加元素
+function Map:InsertKey( index_key, key, val )
 	--TabSet 不允许重复元素
-	local tmp = self.TabMMap:FindNode(key)
+	local tmp = self.MMap:Find(key)
 	if tmp == nil then
-		self.TabMMap:InsertPos(pos, key, val)
+		self.MMap:InsertKey(index_key, key, val)
 	end
 end
 
---根据Key 位置值, 在key所在的位置的后面, 插入元素(触发table重新排序)
-function TabMap:InsertKey( index_key, key, val )
-	--TabSet 不允许重复元素
-	local tmp = self.TabMMap:FindNode(key)
-	if tmp == nil then
-		self.TabMMap:InsertKey(pos, key, val)
-	end
+--仅排序
+function Map:Sort()
+	self.MMap:Sort()
 end
 
---根据Key 值, 删除元素(触发table重新排序)
---成功返回true, 失败返回false(debug only)
-function TabMap:Remove( key )
-	self.TabMMap:Remove(key)
+--仅乱序
+function Map:Shuffle()
+	self.MMap:Shuffle()
 end
 
---根据Pos 位置值, 删除元素(触发table重新排序) [这个函数少用!! 不安全]
---成功返回true, 失败返回false(debug only)
-function TabMap:RemovePos( pos )
-	self.TabMMap:Remove(pos)
+--仅返回一个带有所有元素的无序table
+function Map:toTable_Only()
+	return self.MMap:toTable_Only()
 end
 
 --自测函数(不对外公开)
 local function Test(t_map_str)
 	local i = 0
+	local fristNode = nil
 	local t = nil
 	t_map_str:PushFront("key", 9)
 	t_map_str:PushBack("fff", "ff")
 	t_map_str:PushFront("666", "fuc")
 	t_map_str:PushBack("qq", "xx")
-	t_map_str:InsertPos(2, "222", 222)
-	t_map_str:InsertKey("222", "666", 33333)
-	print("t_map_str.TabMMap.Len\t=",t_map_str.TabMMap.Len)
-	for i=1,t_map_str.TabMMap.Len,1 do
-		print(t_map_str.TabMMap.Key[i],t_map_str.TabMMap.Val[i])
+	t_map_str:InsertKey("fff", "fff", 33333)
+	print("t_map_str.MMap.Len\t=",t_map_str.MMap.Len)
+	fristNode = t_map_str.MMap.First
+	for i=1,t_map_str.MMap.Len,1 do
+		print(fristNode.key, fristNode.val)
+		fristNode = fristNode.rear
 	end
 	t_map_str:Shuffle()
-	print("Shuffle(): t_map_str.TabMMap.Len\t=",t_map_str.TabMMap.Len)
-	for i=1,t_map_str.TabMMap.Len,1 do
-		print(t_map_str.TabMMap.Key[i],t_map_str.TabMMap.Val[i])
+	print("t_map_str.MMap.Len\t=",t_map_str.MMap.Len)
+	fristNode = t_map_str.MMap.First
+	for i=1,t_map_str.MMap.Len,1 do
+		print(fristNode.key, fristNode.val)
+		fristNode = fristNode.rear
 	end
 	t_map_str:Sort()
-	print("Sort(): t_map_str.TabMMap.Len\t=",t_map_str.TabMMap.Len)
-	for i=1,t_map_str.TabMMap.Len,1 do
-		print(t_map_str.TabMMap.Key[i],t_map_str.TabMMap.Val[i])
+	print("t_map_str.MMap.Len\t=",t_map_str.MMap.Len)
+	fristNode = t_map_str.MMap.First
+	for i=1,t_map_str.MMap.Len,1 do
+		print(fristNode.key, fristNode.val)
+		fristNode = fristNode.rear
 	end
-	print("---")
-	t = t_map_str:FindNodeByPos(2)
-	print(t[1], t[2])
-	t = t_map_str:FindNode("666")
-	print(t[1], t[2])
+	print("\n---\n")
 	t = t_map_str:Front()
 	print(t[1], t[2])
 	t = t_map_str:Back()
 	print(t[1], t[2])
 	print(t_map_str:Count())
-	t_map_str:Remove(2)
-	t_map_str:Remove(19)
-	t_map_str:RemovePos(1)
 	t = t_map_str:PopFront()
 	print(t[1], t[2])
 	t = t_map_str:PopBack()
 	print(t[1], t[2])
-	--测试插入重复元素(应该不成功)
-	t_map_str:PushFront("666", "fuc")
-	print("t_map_str.TabMMap.Len\t=",t_map_str.TabMMap.Len)
-	for i=1,t_map_str.TabMMap.Len,1 do
-		print(t_map_str.TabMMap.Key[i],t_map_str.TabMMap.Val[i])
-	end
 	print(t_map_str:Count())
 	print(t_map_str:Empty())
+	print("toTable_Only():")
+	t = t_map_str:toTable_Only()
+	for i=1,#t,2 do
+		print(t[i],t[i+1])
+	end
 	t_map_str:Clear()
 	print(t_map_str:Empty())
 end
 
 --启动自测
---local t_map_str=TabMap:New("string"); if t_map_str ~= nil then Test(t_map_str) end
+--local t_map_str=Map:New("string"); if t_map_str ~= nil then Test(t_map_str) end
 
-return TabMap
+return Map

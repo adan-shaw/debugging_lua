@@ -6,11 +6,13 @@
 #   TabList.lua
 #   TabSet.lua
 #   TabMap.lua
+#   TabMMap.lua
 # based on linklist:
 #   Queue.lua
 #   List.lua
 #   Set.lua
 #   Map.lua
+#   MMap.lua
 #
 # basic test is all passed, if you feel it's not safe, please do not use it
 # unfortunately, when i finished this project, i found a very good cpp project named swig, 

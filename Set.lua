@@ -218,6 +218,8 @@ Public License instead of this License.
 	频繁插入/删除时, set 的性能问题(只有在频繁增删的情况下有优势)
 
 	不能批量插入/删除
+
+	不允许相同的val元素值
 --]]
 
 
@@ -247,13 +249,13 @@ end
 --返回第一个元素
 --成功返回节点元素值, 失败返回nil
 function Set:Front()
-	return self.List:Front(Type)
+	return self.List:Front()
 end
 
 --返回最后一个元素
 --成功返回节点的val元素值, 失败返回nil
 function Set:Back()
-	return self.List:Back(Type)
+	return self.List:Back()
 end
 
 --从Set头部插入元素

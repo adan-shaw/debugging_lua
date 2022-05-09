@@ -218,6 +218,8 @@ Public License instead of this License.
 	频繁插入/删除时, list 的性能问题(只有在频繁增删的情况下有优势)
 
 	不能批量插入/删除
+
+	允许相同的val元素值
 --]]
 
 
@@ -635,6 +637,7 @@ local function Test(t_list_num)
 	t_list_num:PushFront(19)
 	t_list_num:PushBack(1)
 	t_list_num:PushFront(1900)
+	t_list_num:PushBack(222)
 	t_list_num:PushBack(222)
 	print("t_list_num.Len\t=",t_list_num.Len)
 	fristNode = t_list_num.First

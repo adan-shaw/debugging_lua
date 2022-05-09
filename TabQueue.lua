@@ -239,7 +239,12 @@ Public License instead of this License.
 
 
 缺点:
-	元素太多, 性能会下跌, 元素太多, 可以考虑用linklist 链表list(可以频繁删除or 插入元素)
+	元素太多, 性能会下跌, 可以考虑用linklist 链表list;
+	元素少的情况下, 也可以适当频繁插入/删除(最好就不要频繁插入/删除)
+
+	可以批量插入元素, 可以批量导出元素
+
+	允许相同的val元素值
 --]]
 
 
@@ -451,6 +456,7 @@ local function Test(t_queue_num)
 	t_queue_num:PushFront(19)
 	t_queue_num:PushBack(1)
 	t_queue_num:PushFront(1900)
+	t_queue_num:PushBack(222)
 	t_queue_num:PushBack(222)
 	print("t_queue_num.Pos\t=",t_queue_num.Pos)
 	for i=1,t_queue_num.Pos,1 do

@@ -218,7 +218,9 @@ Public License instead of this License.
 	继承所有TabList 的特性, 剪裁出TabSet, 
 	元素少的情况下, 也可以适当频繁插入/删除(最好就不要频繁插入/删除)
 
-	TabSet 不允许有重复元素的出现
+	可以批量插入元素, 可以批量导出元素
+
+	TabSet 不允许有重复val元素值的出现
 --]]
 
 

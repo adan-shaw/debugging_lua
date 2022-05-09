@@ -216,6 +216,10 @@ Public License instead of this License.
 --[[
 说明:
 	TabStack = 先进后出
+
+	不可以批量插入元素, 可以批量导出元素
+
+	允许相同的val元素值
 --]]
 
 

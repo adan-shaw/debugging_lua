@@ -217,6 +217,10 @@ Public License instead of this License.
 说明:
 	在TabQueue 的基础上, 改造出TabList, 
 	元素少的情况下, 也可以适当频繁插入/删除(最好就不要频繁插入/删除)
+
+	可以批量插入元素, 可以批量导出元素
+
+	允许相同的val元素值
 --]]
 
 
@@ -498,6 +502,7 @@ local function Test(t_list_num)
 	t_list_num:PushBack(1)
 	t_list_num:PushFront(1900)
 	t_list_num:PushBack(222)
+	t_list_num:InsertPos(2, 666)
 	t_list_num:InsertPos(2, 666)
 	print("t_list_num.Pos\t=",t_list_num.Pos)
 	for i=1,t_list_num.Pos,1 do

@@ -1,0 +1,31 @@
+FFI 库时默认编译进LuaJIT 中的, 所以可以轻松使用, 不需要重新编译LuaJIT;
+(lua 官网版本, 没有ffi)
+
+
+
+FFI 库默认没有加载或初始化, 
+因此, 使用时在 Lua 文件的开头添加如下语句:
+local ffi = require("ffi")
+
+然后才能使用ffi 的各项功能;
+
+
+
+# 使用方法:
+# 1.包含ffi 模块
+local ffi = require("ffi")
+
+
+
+# 2.声明c 函数API(类似声明c 函数API 指针)
+ffi.cdef[[
+	void sleep(int ms);
+	int printf(const char *format, ...);
+	int printf(const char *format, int s);
+]]
+
+
+
+# 3.调用c 函数API
+ffi.C.sleep(1)
+ffi.C.printf("%d\n", 999);

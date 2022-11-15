@@ -1,12 +1,12 @@
-lua_basic  =  lua基础教程
-lua_stl    =  lua容器库
-openresty  =  openresty first demo
+# lua_basic  =  lua基础教程
+# lua_stl    =  lua容器库
+# openresty  =  openresty first demo
 
 
-author: adan_shaw@qq.com
+# author: adan_shaw@qq.com
 
 
-have some fun, young students, good luck.
+# have some fun, young students, good luck.
 
 
-2022/11/15
+# 2022/11/15

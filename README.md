@@ -8,5 +8,6 @@
 
 # 2022/11/15
 
-# affix china's gitee:
+# affix:
 #   https://gitee.com/adan_shaw/debugging_lua
+#   https://github.com/adan-shaw/debugging_lua

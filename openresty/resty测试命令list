@@ -3,10 +3,10 @@ cd /home/tarball/openresty
 
 
 # 内嵌luajit 执行一句lua 语句
-./bin/resty -e 'print("fuck you")'
+./bin/resty -e 'print("love you")'
 
 # 指定lua 库路径, 执行lua 命令
-./bin/resty -I lua_home/adan_lua -e 'print("fuck")'
+./bin/resty -I lua_home/adan_lua -e 'print("love")'
 
 
 

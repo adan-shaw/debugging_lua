@@ -78,7 +78,7 @@ local str_def_test = string.dump(def_test)
 local api_def_test = loadstring(str_def_test)
 
 --执行宏函数
-api_def_test("fuck you")
+api_def_test("love you")
 
 --打印类型
 print(type(str_def_test))

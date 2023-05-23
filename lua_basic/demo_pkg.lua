@@ -86,7 +86,7 @@
 	*11.lua内建模块, 不需要require(""), 适宜直接引用
 		 --local PRINT=require("io").write; --lua内建模块, 不需要require("io")
 		 local PRINT=io.write
-		 PRINT("fuck you")
+		 PRINT("love you")
 ]]
 
 

@@ -6,7 +6,7 @@ tmpfile = os.tmpname()
 print(tmpfile)
 
 --改文件名
-os.rename(tmpfile,"/tmp/fuckyou")
+os.rename(tmpfile,"/tmp/loveyou")
 
 --删除指定文件
 os.remove(tmpfile)
@@ -34,7 +34,7 @@ stdout = io.stdout
 
 --标准stdout输出
 io.write("stdout: io.write()\n")
---print("fuck you")
+--print("love you")
 
 --标准stdin录入
 --str_tmp = io.read()
@@ -90,7 +90,7 @@ fd:setvbuf("line")
 
 
 --写
-fd:write("fuck you\n")
+fd:write("love you\n")
 
 
 --冲刷

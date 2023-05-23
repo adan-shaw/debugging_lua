@@ -7,7 +7,7 @@ wr1 = coroutine.wrap(
 
 
 --执行wrap() 协程
-wr1("fuck you")
+wr1("love you")
 
 
 --wrap()协程只能执行一次, 再次执行会报错, 因为执行一次之后, 就会dead

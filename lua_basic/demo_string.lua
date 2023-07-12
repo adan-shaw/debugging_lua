@@ -57,7 +57,7 @@ print(string.upper("aaWSb"))
 
 
 --获取string长度(英文字母占1bit, 中文占3 bit)
-print("len:",string.len("，，，"))
+print("len:",string.len(", , , "))
 print("len:",string.len("草你妈"))
 print("len:",string.len("aa草"))
 print("len:",string.len("aa00"))

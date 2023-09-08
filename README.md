@@ -4,7 +4,7 @@
 
 # author: adan_shaw@qq.com
 
-# have some fun, young students, good luck.
+# have some fun here, young students, good luck.
 
 # 2022/11/15
 

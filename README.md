@@ -6,7 +6,8 @@
 
 # have some fun here, young students, good luck.
 
-# 2022/11/15 [the start]
+# 2022/5/9 [the start]
+# 2022/11/20 [the end]
 
 # affix:
 #   https://gitee.com/adan_shaw/debugging_lua

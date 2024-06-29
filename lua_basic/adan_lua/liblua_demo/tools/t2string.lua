@@ -16,10 +16,10 @@ local ifString = require("ifString")
 
 local tmap = {}
 ---table转字符串
----@param list 	string[]  					@存储字符串
----@param val  	table	 					@lua-table
----@param level	number|nil	 				@递归深度
----@param key	number|boolean|string|nil	@归属key值
+---@param list   string[]                  @存储字符串
+---@param val    table                     @lua-table
+---@param level  number|nil                @递归深度
+---@param key    number|boolean|string|nil @归属key值
 local function _t2sList(list,val,level,key)
 	if ifString(val) then
 		table.insert( list,val)

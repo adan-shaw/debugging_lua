@@ -25,7 +25,7 @@ local  function localf(base)
 	---对象类型
 	class_type.__base   = base
 	class_type.__type   = 'class'
-	class_type.ctor	 = false
+	class_type.ctor     = false
 	
 	---虚函数表
 	local vtbl = {}

@@ -1,9 +1,9 @@
 ---归并排序
----@param arr   any[]	   @数组
----@param comp  function	@比较方法
----@param left  number	  @开始位置
----@param right number	  @结束位置
----@param help  any[]	   @外部传入数据保存
+---@param arr   any[]     @数组
+---@param comp  function  @比较方法
+---@param left  number    @开始位置
+---@param right number    @结束位置
+---@param help  any[]     @外部传入数据保存
 local function localf(arr,comp,left,right,help)
 	if left < right then
 		local half = (left + right) // 2

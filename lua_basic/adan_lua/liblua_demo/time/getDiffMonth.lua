@@ -7,8 +7,8 @@ local os = os
 local math = math
 
 ---间隔月
----@param aSec 	sec	@日期表
----@param bSec 	sec	@日期表
+---@param aSec   sec	@日期表
+---@param bSec   sec	@日期表
 ---@return integer
 local function localf(aSec,bSec)
 

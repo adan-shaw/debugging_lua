@@ -2,10 +2,10 @@ local table = table
 local exist_count = require("table.exist_count")
 
 ---数组查找移除
----@param arr any[] 		@数组
----@param val any	  		@移除的值
----@param cnt count 		@移除个数默认值为1
----@param nck boolean 		@不检查
+---@param arr any[]   @数组
+---@param val any     @移除的值
+---@param cnt count   @移除个数默认值为1
+---@param nck boolean @不检查
 ---@return  boolean
 local function localf(arr,val,cnt,nck)
 	cnt = cnt or 1

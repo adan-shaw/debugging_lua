@@ -7,10 +7,10 @@ local math = math
 local shuffle = require("shuffle")
 
 ---范围分段随机
----@param mini  integer 	 @开始数字
----@param maxi	integer 	 @结束数字
----@param need  integer 	 @需要个数
----@param list  integer[] 	 @数组容器
+---@param mini  integer    @开始数字
+---@param maxi	integer    @结束数字
+---@param need  integer    @需要个数
+---@param list  integer[]    @数组容器
 ---@return integer[]
 local function localf(mini,maxi,need,list)
 

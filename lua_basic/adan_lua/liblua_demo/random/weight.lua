@@ -9,8 +9,8 @@ local pairs = pairs
 local ipairs = ipairs
 
 ---权重随机
----@param arr 	number[] 权重配置
----@param sum 	number				权重之和
+---@param arr   number[] 权重配置
+---@param sum   number				权重之和
 ---@return index
 local function localf(arr,sum)
 	local is = {}

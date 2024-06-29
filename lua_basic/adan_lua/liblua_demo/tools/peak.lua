@@ -4,8 +4,8 @@
 ]]
 
 ---向上执行到顶点
----@param o table	   @对象
----@param f string	  @名字
+---@param o table   @对象
+---@param f string  @名字
 return function(o,f,...)
 	do
 		local function loop(c, ...)

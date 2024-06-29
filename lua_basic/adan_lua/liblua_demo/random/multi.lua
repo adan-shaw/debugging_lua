@@ -7,8 +7,8 @@ local math = math
 local table = table
 
 ---不重复随机
----@param lib any[]	 @随机库
----@param lis any[]	 @结果库
+---@param lib any[]  @随机库
+---@param lis any[]  @结果库
 ---@param cnt count  @要多少
 ---@return any[]
 local function localf(lib,lis,cnt)

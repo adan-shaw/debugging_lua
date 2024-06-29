@@ -14,11 +14,11 @@ local this = class()
 ---@param min number @最少数
 ---@param max number @最大数
 function this:ctor(min,max)
-	self._min = min	 --最少数
-	self._max = max	 --最大数
+	self._min = min     --最少数
+	self._max = max     --最大数
 	self._lim = min - 1 --刻度数
 	self._cur = min - 1 --当前取
-	self._cnt = 0	   --占数量
+	self._cnt = 0       --占数量
 	self._lis = {nil}
 end
 

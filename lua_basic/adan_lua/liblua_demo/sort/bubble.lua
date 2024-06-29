@@ -13,9 +13,9 @@ local function localf(arr,comp,cnt)
 		for j = i + 1,len do  
 			if comp(arr[j],arr[i]) then  
 				arr[i],arr[j] = arr[j],arr[i]
-			end  
-		end  
-	end  
+			end
+		end
+	end
 end
 
 return localf

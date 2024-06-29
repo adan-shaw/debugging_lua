@@ -4,7 +4,7 @@ local ipairs = ipairs
 local setmetatable = setmetatable
 
 ---不重复随机-缓存版本
----@param  list any[] 				@随机数组
+---@param  list any[]   			@随机数组
 ---@param  map  table<any,true>|nil	@排除数据
 ---@return fun(index:index|nil):index				@随机闭包
 local function localf(list,map)
@@ -15,14 +15,14 @@ local function localf(list,map)
 	--记录
 	local cache = setmetatable({},
 	{
-	 __index = function(t,index)
-		 return list[index]
-	 end
+		__index = function(t,index)
+			return list[index]
+		end
 	})
 	
 	local function closure(index)
-		 ---避免报错
-		 if takeup == capacity then
+		---避免报错
+		if takeup == capacity then
 			---容错(随机一个结果)
 			index = math.random(1,capacity)
 			return cache[index]

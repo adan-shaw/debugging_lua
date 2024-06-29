@@ -11,17 +11,17 @@ local sortInsert = require("sort.insert")
 local this = class()
 
 ---@class rank
----@field iden  any	 @唯一标示
+---@field iden  any     @唯一标示
 ---@field score score   @排行积分
 
 ---构造函数
----@param max   count @最大数量
+---@param max   count   @最大数量
 function this:ctor(max)
 	---最大数量
 	---@type count
 	self._max = max;
 	---排行数据
-	---@type rank[]				 
+	---@type rank[]
 	self._lis = {};
 	---映射数据
 	---@type table<any,rank>
@@ -42,7 +42,7 @@ end
 
 
 ---设置最低限制
----@param score score @最低积分 
+---@param score score   @最低积分
 function this:setMinScore(score)
 	self._min = score
 end
@@ -56,7 +56,7 @@ local function comp(a,b)
 end
 
 ---更新数据
----@param iden  any	 @唯一标识
+---@param iden  any     @唯一标识
 ---@param score score   @积分
 function this:update(iden,score)
 
@@ -87,7 +87,7 @@ end
 
 
 ---删除数据
----@param iden  any	 @唯一标识
+---@param iden  any     @唯一标识
 function this:remove(iden)
 	local lis = self._lis
 	local map = self._map

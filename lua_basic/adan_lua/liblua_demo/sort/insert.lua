@@ -8,10 +8,10 @@ local ipairs = ipairs
 local function localf(arr,comp,new)  
 	local len = #arr
 	for k,val in ipairs(arr) do
-	   if comp(new,val) then  
-		   table.insert(arr,k,new)
-		   return
-	   end  
+			if comp(new,val) then  
+				table.insert(arr,k,new)
+				return
+			end
 	end
 	
 	--到这里直接添加到末尾

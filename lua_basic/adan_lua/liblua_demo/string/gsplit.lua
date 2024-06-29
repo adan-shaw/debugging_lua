@@ -9,8 +9,8 @@ local clear = require("table.clear")
 
 --[[
 	字符串分割 支持正则
-	param:	s	被拆分的string	
-			p	分隔符(可以是正则表达式)
+	param:  s 被拆分的string
+          p 分隔符(可以是正则表达式)
 	return: {}拆分出来的序列表
 ]]
 

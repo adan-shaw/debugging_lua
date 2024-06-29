@@ -8,7 +8,7 @@ local table = table
 ---移除数组
 ---@overload fun<V>(t:table<nmber,V> | V[]):V
 ---@generic V
----@param t  table<nmber,V> | V[]	   @只有这个参数 等同 table.remove
+---@param t  table<nmber,V> | V[]   @只有这个参数 等同 table.remove
 ---@param i1 number|nil @开始位置
 ---@param i2 number|nil @结束位置
 ---@return V|nil

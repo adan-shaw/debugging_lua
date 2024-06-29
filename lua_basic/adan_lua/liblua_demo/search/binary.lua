@@ -1,8 +1,8 @@
 local math = math
 ---折半查找函数
----@param arr 	any[] 								@数组
----@param comp 	fun(a:any,b:any):greaterEqualLess 	@比较函数
----@param val 	any 								@查找值
+---@param arr   any[]                                @数组
+---@param comp  fun(a:any,b:any):greaterEqualLess    @比较函数
+---@param val   any                                  @查找值
 ---@return index
 local function localf(arr,comp,val)
 

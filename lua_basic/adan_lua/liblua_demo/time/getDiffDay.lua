@@ -8,8 +8,8 @@ local math = math
 local getZero = require("time.getZero")
 
 ---间隔天
----@param aSec 	sec	@日期表
----@param bSec 	sec	@日期表
+---@param aSec   sec	@日期表
+---@param bSec   sec	@日期表
 ---@return integer
 local function localf(aSec,bSec)
 	aSec = getZero(aSec) + 28800

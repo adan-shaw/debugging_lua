@@ -62,7 +62,7 @@ end
 
 ---触发事件
 ---@param   name string @触发事件
----@vararg  any[]	   @事件参数
+---@vararg  any[]       @事件参数
 function this:ejector(name,...)
 	local list = self:events(name)
 	calls(list,...)

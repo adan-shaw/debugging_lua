@@ -11,7 +11,7 @@ local fminmax = require("array.minmax")
 local copy1 = {nil}
 
 ---计数排序
----@param arr number[]	 @数组 
+---@param arr number[]     @数组
 ---@param min number|nil   @最小
 ---@param max number|nil   @最大
 ---@return number[]

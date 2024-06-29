@@ -34,9 +34,9 @@ function this:ctor()
 end
 
 ---注册属性
----@param uuid		  string			  @唯一属性标识
----@param lower		 table<uuid,true>	@向下属性查询(包含自己)
----@param upper		 table<uuid,true>	@向上属性查询(包含自己)
+---@param uuid     string           @唯一属性标识
+---@param lower    table<uuid,true> @向下属性查询(包含自己)
+---@param upper    table<uuid,true> @向上属性查询(包含自己)
 function this:register(uuid,lower,upper)
 	assert(uuid and lower and upper and lower ~= upper)
 	assert(not self._list[uuid])
@@ -55,8 +55,8 @@ function this:wears(bodyUUID,caseUUID)
 	---我上行的下行
 	local bodyUpper = self._upper[bodyUUID]
 	for kuuid, _ in pairs(bodyUpper) do
-	   local lower = self._lower[kuuid]
-	   lower[caseUUID] = true
+			local lower = self._lower[kuuid]
+			lower[caseUUID] = true
 	end
 	---我下行的上行
 	local caseLower = self._lower[caseUUID]
@@ -75,8 +75,8 @@ function this:unload(bodyUUID,caseUUID)
 	---我上行的下行
 	local bodyUpper = self._upper[bodyUUID]
 	for kuuid, _ in pairs(bodyUpper) do
-	   local lower = self._lower[kuuid]
-	   lower[caseUUID] = nil
+			local lower = self._lower[kuuid]
+			lower[caseUUID] = nil
 	end
 
 	---我下行的上行
@@ -88,7 +88,7 @@ function this:unload(bodyUUID,caseUUID)
 end
 
 ---增加属性
----@param uuid  string	  @唯一属性标识
+---@param uuid  string      @唯一属性标识
 ---@param attr  allPowers   @增加属性值
 function this:append(uuid,attr)
 	local cache = self._list[uuid]
@@ -99,7 +99,7 @@ function this:append(uuid,attr)
 end
 
 ---扣除属性
----@param uuid  string	  @唯一属性标识
+---@param uuid  string      @唯一属性标识
 ---@param attr  allPowers   @增加属性值
 function this:deduct(uuid,attr)
 	local cache = self._list[uuid]
@@ -124,7 +124,7 @@ end
 
 local copy1 = {nil}
 ---计算战力
----@param attr allPowers @属性
+---@param attr allPowers    @属性
 ---@return allPowers
 function this:power(attr)
 	attr.zdl = 0
@@ -149,7 +149,7 @@ function this:power(attr)
 end
 
 ---计算属性
----@param uuid  string	  @唯一属性标识
+---@param uuid  string      @唯一属性标识
 ---@return allPowers
 function this:calcul(uuid)
 	local cache = self._cache[uuid] or self:feach()
@@ -159,10 +159,10 @@ function this:calcul(uuid)
 		---总数据收集
 		local map = self._lower[uuid]
 		for kuuid,_ in pairs(map) do
-		   local attr = self._list[kuuid]
-		   absorb(cache.abs,attr.abs)
-		   absorb(cache.per,attr.per)
-		   absorb(cache.buf,attr.buf)
+				local attr = self._list[kuuid]
+				absorb(cache.abs,attr.abs)
+				absorb(cache.per,attr.per)
+				absorb(cache.buf,attr.buf)
 		end
 
 		---总属性计算

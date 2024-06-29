@@ -11,11 +11,11 @@ end
 local function localf(t)
 
 	local mt = {
-	 __index = function(t,k)
-		return t[k] 
-	 end,
+		__index = function(t,k)
+			return t[k] 
+		end,
 
-	 __newindex = newindex
+		__newindex = newindex
 	}
 
 	setmetatable(t, mt) 

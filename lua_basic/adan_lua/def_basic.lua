@@ -26,6 +26,4 @@ return {
 	print(x, x2)
 	x, x2 = swap_num(x, x2)
 	print(x, x2)
-
-
 ]]

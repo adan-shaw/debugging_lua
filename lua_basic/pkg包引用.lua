@@ -60,33 +60,22 @@
 
 
 
-	*8.dofile(""), 以函数的方式装载lua 文件, 装载过程中必定自动执行一次.
-		 loadfile(""), 以函数的方式装载lua 文件, 装载过程中不自动执行.
-		 这两个命令, 可以用来装载lua 命令逻辑, 而不是封装好的lua 函数api.
-		 装载lua 命令逻辑, 方便引用其它lua 文件.
-
-
-
-	*9.dofile("") && loadfile("")需要带*.lua后缀, 与require("")相反.
-
-
-
-	*9.释放已经装载的package:
+	*8.释放已经装载的package:
 		 package.loaded["debug"] = nil
 		 package.loaded["adan_lib/pkg_tab_print"] = nil
 
 
 
-	*10.require("") 引用lua 函数api 时, 可以只引用一个api, 而不是装载整个api table
+	*9.require("") 引用lua 函数api 时, 可以只引用一个api, 而不是装载整个api table
 		 local tab_print=require("adan_lib/pkg_tab_print").tab_print
 		 tab_print("_G")
 
 
 
-	*11.lua内建模块, 不需要require(""), 适宜直接引用
+	*10.lua内建模块, 不需要require(""), 适宜直接引用
 		 --local PRINT=require("io").write; --lua内建模块, 不需要require("io")
 		 local PRINT=io.write
-		 PRINT("love you")
+		 PRINT("fuck you")
 ]]
 
 
@@ -99,4 +88,5 @@ package.loaded["debug"] = nil
 --打印已装载的所有内建模块
 local ptab = require("print_tab").print_tab
 ptab(package.loaded)
+
 

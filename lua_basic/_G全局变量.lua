@@ -37,7 +37,7 @@ _G.debug = nil
 	_G = nil
 	_G = {}
 
-	print("love you")
+	print("fuck you")
 	next(_G)
 ]]
 

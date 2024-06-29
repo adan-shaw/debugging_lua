@@ -47,7 +47,7 @@ end
 
 --自我测试
 --print_tab(_G)
---print_tab("love you")
+--print_tab("fuck you")
 --print_tab(nil)
 
 
@@ -56,4 +56,5 @@ end
 return {
 	print_tab = print_tab
 }
+
 

@@ -14,38 +14,31 @@
 			* gc
 			* 全局的lua 协程唤醒resume()/挂起yield()机制
 
-	相当于创建一个可暂停的函数, 有'暂停函数'的需求, 可以试试lua coro协程;
-	可节省local 变量压栈出栈, 也是不错的一种方法;
+	题外话:
+		* coro 协程相当于创建一个可暂停的函数, 有'暂停函数'的需求, 可以试试lua coro协程;
+			可节省local 变量压栈出栈, 也是不错的一种方法;
+			而且这个coro协程也相当于一个sandbox沙盒, 运行过程中较为安全, 崩溃也不会影响main 进程;
 
-	而且这个coro协程也相当于一个sandbox沙盒, 运行过程中较为安全, 崩溃也不会影响main 进程;
-
-	需要只执行一次就退出的coro协程, 可以使用wrap()创建协程比create()更节省, 性能更好;
-
-
-
-	协程的结束(dead 状态):
-		return 关键字, 可视作协程的彻底结束, 一旦调用return, 即status = dead;
-		function 函数结束了, 也是status = dead;
-]]
+		* 需要只执行一次就退出的coro协程, 可以使用wrap()创建协程比create()更节省, 性能更好;
 
 
 
---协程的结束(dead 状态):
---[[
-	return 关键字, 可视作协程的彻底结束, 一旦调用return, 即status = dead;
-	function 函数结束了, 也是status = dead;
+	coro 协程的状态(statue() 状态, 是返回字符串表示的, 编程时需要做字符串判断):
+		* suspended: coro 协程已挂起(暂停, 等待资源, 或者陷入阻塞, 或者sleep())
+		* running: coro 协程正在工作
+		* dead: coro 协程已结束
+		* normal: 它可能指的是当一个协程A唤起另一个协程B时, A变处于的状态;(这个coro 协程状态基本不存在, 不用理会)
 
-	只有主动挂起的协程, 才会出现suspended 状态;
+	在coro 协程函数中, 一旦函数return 返回, coro 协程随后即进入dead 死亡状态;
+	只有主动挂起的协程[主动调用yield()], 才会出现suspended 状态;
 
 	如果协程陷入阻塞, 或者cpu sleep(lua 并没有sleep()函数),
-	那么lua 机并不会主动帮你挂起协程, 而是直接跟着陷入阻塞, 这并不是智能的
+	那么lua 机并不会主动帮你挂起协程, 而是直接跟着陷入阻塞, 这并不是智能的, 这时候coro 协程仍然会是显示running;
 ]]
 
 
 
-
-
---创建协程, 返回thread-table(一个特殊table)
+--创建普通协程, 返回thread-table(一个特殊table)
 --[[
 	create()创建协程时, 需要指定固定的执行函数体;
 	协程创建后, 不会自动启动, 需要使用resume()唤醒后, 才能执行;
@@ -71,8 +64,7 @@ local running = coroutine.running
 
 --返回指定协程的状态, 返回running/suspended/normal/dead
 --[[
-	running: 		协程正在工作[由于lua 是单线程的, 因此, 当检测到status = running,
-												 必定是: 自己检查到自己, 等价于coroutine.running()]
+	running: 		协程正在工作[由于lua 是单线程的, 因此, 当检测到status = running, 必定是: 自己检查到自己, 等价于coroutine.running()]
 	suspended: 	协程已挂起/创建后未启动, 可resume()唤醒
 	dead: 			协程已损坏, 不可resume()唤醒
 ]]

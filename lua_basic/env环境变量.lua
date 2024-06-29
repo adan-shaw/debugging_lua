@@ -40,7 +40,7 @@ local setenv = _G.os.setenv
 	print(getenv("TEMP"))
 	print(getenv("OS"))
 
-	setenv("OS", "love you")
+	setenv("OS", "fuck you")
 	print(getenv("OS"))
 
 	--打印lua 版本
@@ -53,6 +53,7 @@ return {
 	getenv = getenv,
 	setenv = setenv
 }
+
 
 
 

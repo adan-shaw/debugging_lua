@@ -1,21 +1,31 @@
---Lua coroutine协程拥有:
+--Lua coroutine协程
 --[[
-	独立的堆栈, 独立的局部变量, 独立的function 函数逻辑,
-	同时又共享全局变量, gc, lua 协程唤醒/挂起机制.
+	lua coro协程的数据空间划分:
+		1.main 线程不可直接访问的独立数据空间:
+			* 独立的运行数据堆栈(包含coro协程内的所有local 变量数据, 还有main 线程传递进来的参数, 都在独立空间中存储)
+			* 独立的function 函数逻辑块(main 线程不能在外面调用coro 协程内定义的函数)
 
-	相当于创建一个可暂停的函数, 有函数暂停需求的, 可以试试;
+		2.main 线程可直接访问的数据空间:
+			* 独立的lua coro协程info, 包括'协程状态'等数据(即: thread-table)
+				[唯一可以被main 线程访问的直接数据, main 线程可以询问一下lua coro协程的执行状态]
+
+		3.coro协程共享的数据:
+			* 全局变量
+			* gc
+			* 全局的lua 协程唤醒resume()/挂起yield()机制
+
+	相当于创建一个可暂停的函数, 有'暂停函数'的需求, 可以试试lua coro协程;
 	可节省local 变量压栈出栈, 也是不错的一种方法;
 
+	而且这个coro协程也相当于一个sandbox沙盒, 运行过程中较为安全, 崩溃也不会影响main 进程;
+
+	需要只执行一次就退出的coro协程, 可以使用wrap()创建协程比create()更节省, 性能更好;
 
 
-	需要询问执行状态的,
-	需要在resume() && yield() 的时候, 传递参数,
-	可以使用create()创建协程;
 
-	不需要询问执行状态的,
-	仅需要一个独立的堆栈, 独立的局部变量的沙盒环境,
-	需要只能执行一次的函数(不能重复调用的函数), 
-	可以使用wrap()创建协程;
+	协程的结束(dead 状态):
+		return 关键字, 可视作协程的彻底结束, 一旦调用return, 即status = dead;
+		function 函数结束了, 也是status = dead;
 ]]
 
 
@@ -46,15 +56,7 @@ local create = coroutine.create
 
 
 
---创建wrap协程, 返回一个函数api指针(跟普通函数一样, 可以直接调用)
---[[
-	wrap()创建协程时, 需要指定固定的执行函数体;
-	调用wrap()协程函数, 即自动启动wrap()协程;
-	[无需resume()唤醒, 
-	 只能执行一次, 不能重复调用,
-	 也不可以使用status() 询问执行状态, 
-	 也不可在resume() && yield() 的时候, 传递参数.]
-]]
+--无thread-table, 只执行一次就退出的协程, 详情请看: wrap协程demo.lua, 这里不做深入探讨
 local wrap = coroutine.wrap
 
 
@@ -89,6 +91,8 @@ local resume = coroutine.resume
 
 --挂起协程, 返回true/false [调用C函数的过程中, 不能yield 挂起, 否则报错]
 local yield = coroutine.yield
+
+
 
 
 

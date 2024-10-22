@@ -5,6 +5,7 @@ make -j4
 make test
 cd ..
 
+mkdir ./lua-aes-crypto-all-files
 cd ./lua-aes-crypto-all-files
 ln -s ../lua-aes/aes128.so
 ln -s ../lua-aes/aes192.so

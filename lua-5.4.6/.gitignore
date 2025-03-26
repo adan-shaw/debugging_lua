@@ -7,4 +7,6 @@
 *.mp3
 lua
 luac
+luajit
 x
+doc

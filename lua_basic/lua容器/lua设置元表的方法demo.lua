@@ -19,19 +19,19 @@ t_first.__index = t_first
 setmetatable(t_second, t_first)
 
 --更新__index索引表
-t_first["fuck"] = "fuck you"
+t_first["love"] = "love you"
 
 --查看__index索引表的更新
-print(t_second.fuck)
+print(t_second.love)
 
 --测试元表动态更新[ok]
-t_first["fuck"] = "fuck you2"
-print(t_second.fuck)
+t_first["love"] = "love you2"
+print(t_second.love)
 
 
 
 --更新元表[ok]
-t_second["fuck"] = "FU"
+t_second["love"] = "FU"
 
 --查看元表的更新
-print(t_second.fuck)
+print(t_second.love)

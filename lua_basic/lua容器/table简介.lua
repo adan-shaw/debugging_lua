@@ -20,9 +20,9 @@
 
 		table 可以像数组一样, 使用下标索引元素, 前提是: key = 连续number数字;
 		也可以这样:
-				t["fuckyou"] = "again"
+				t["loveyou"] = "again"
 		或者这样:
-				t[1] = "fuck you"
+				t[1] = "love you"
 				t[99] = "again"
 		连续number数字为key 的table, 可以使用下面的方式遍历(ipairs()遇到下标不连续的key, 则中断):
 			for k,v in ipairs(t) do end

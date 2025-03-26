@@ -8,3 +8,12 @@
 lua
 luac
 x
+*.tar.bz2
+web网文/**
+lua_cpp互交/web网文/**
+lua代码执行效率探讨/web网文/**
+lua容器/web网文/**
+*.html
+*.htm
+*.shtml
+

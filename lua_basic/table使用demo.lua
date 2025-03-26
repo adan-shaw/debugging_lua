@@ -47,7 +47,7 @@ end
 
 --nil 空值元素不表示
 table.insert(t1, 1, nil);
-table.insert(t1, 1, "fuck");
+table.insert(t1, 1, "love");
 t1["f"] = "you"
 
 print("pairs() 非连续下标遍历")

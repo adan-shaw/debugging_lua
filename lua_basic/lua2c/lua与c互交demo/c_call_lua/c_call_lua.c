@@ -1,61 +1,90 @@
 //编译:
-//		gcc -g3 -I/home/tarball/luajit/include/luajit-2.1/ -L/home/tarball/luajit/lib -lluajit-5.1 ./c_call_lua.c -o ./c_call_lua.exe
-//		gcc -g3 -I/usr/include/lua5.1/ -L/usr/lib -llua ./c_call_lua.c -o ./c_call_lua.exe
+//手动tarball: 略(未成功)
+//		gcc -g3 -I/home/tarball/luajit/include/luajit-2.1/ -L/home/tarball/luajit/lib -lluajit-5.1 -ldl -lm -Wall ./c_call_lua.c -o ./c_call_lua.exe
+
+//安装依赖: apt-get install lua5.1 liblua5.1-0 liblua5.1-0-dbg liblua5.1-0-dev 
+//		gcc -g3 -llua5.1 -ldl -lm -Wall -I/usr/include/lua5.1/ -L/usr/lib ./c_call_lua.c -o ./c_call_lua.exe
 
 
 
 #include <stdio.h>
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
+#include <errno.h>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 
 
 
-int main ()
+#define LUA_OK (0)//lua5.3 才有的, lua5.1 没有
+
+const char *script = "function my_lua_func(x) return x * 2 end";
+
+
+
+//配置'通用的报错宏'的打印API名
+#define DEBUG_PRINT_API fprintf
+
+//直接定位到最后一个文件名, 去掉path 前缀(妙啊, 节省字符串)
+#define __FILENAME__ (strrchr(__FILE__, '/') ? (strrchr(__FILE__, '/') + 1) : __FILE__)
+
+//报错宏
+#define print_debug(...) \
+	DEBUG_PRINT_API(stderr, "[%s, %s]%s->%s()->LINE-%d-, errno=[%d], ",\
+	__DATE__, __TIME__, __FILE__, __FUNCTION__, __LINE__, errno); \
+	printf(__VA_ARGS__);
+
+
+
+int main (void)
 {
-	//1.创建 Lua 状态: 首先需要创建一个 Lua 状态, 这是 Lua 运行时环境的基础; 
+	int tmp;
+
+	//1.创建Lua 状态(首先需要创建一个Lua 状态, 这是Lua 运行时环境的基础)
 	lua_State *L = luaL_newstate ();
 	luaL_openlibs (L);						//打开标准库
 
-	//2.加载 Lua 脚本: 可以通过 luaL_dofile 或 luaL_dostring 等函数加载并执行 Lua 脚本; 
-	const char *script = "function my_lua_function(x) return x * 2 end";
+	//2.加载Lua 脚本(可以通过luaL_dofile() 或luaL_dostring() 等函数加载并执行Lua 脚本)
 	if (luaL_dostring (L, script) != LUA_OK)
 	{
-		fprintf (stderr, "Lua script error: %s\n", lua_tostring (L, -1));
+		print_debug("%s\n", lua_tostring (L, -1));//弹出一个lua 错误(表示错误值已读, 数据没用了, 命令lua 机丢弃该数据, 送进GC 中回收)
+		//fprintf (stderr, "Lua script error: %s\n", lua_tostring (L, -1));
 		lua_pop (L, 1);
 		lua_close (L);
 		return -1;
 	}
 
-	//3.获取 Lua 函数: 通过 lua_getglobal 获取全局 Lua 函数; 
-	lua_getglobal (L, "my_lua_function");
+	//3.获取Lua 函数(通过lua_getglobal 获取全局Lua 函数)
+	lua_getglobal (L, "my_lua_func");
 
-	//4: 检查函数是否存在在调用之前, 检查函数是否存在, 以避免运行时错误; 
+	//4.调用函数前, 先检查函数是否存在, 以避免运行时错误; 
 	if (!lua_isfunction (L, -1))
 	{
-		fprintf (stderr, "Error: my_lua_function is not a function\n");
+		print_debug("%s\n", lua_tostring (L, -1));//弹出一个lua 错误
 		lua_pop (L, 1);
 		lua_close (L);
 		return -1;
 	}
 
-	//5.调用 Lua 函数: 使用 lua_pcall 调用 Lua 函数; 
-	lua_pushinteger (L, 5);				//设置参数为5
-	int status = lua_pcall (L, 1, 1, 0);//1 个参数, 1 个返回值, 0 个错误处理
-	if (status != LUA_OK)
+	//5.调用Lua 函数(使用lua_pcall 调用Lua 函数)
+	lua_pushinteger (L, 5);//设置参数为5
+	tmp = lua_pcall (L, 1, 1, 0);//1 个参数, 1 个返回值, 0 个错误处理
+	if (tmp != LUA_OK)
 	{
-		fprintf (stderr, "Lua error: %s\n", lua_tostring (L, -1));
+		print_debug("%s\n", lua_tostring (L, -1));//弹出一个lua 错误
 		lua_pop (L, 1);
 		lua_close (L);
 		return -1;
 	}
 
-	//6.处理返回值: 处理 Lua 函数的返回值; 
-	int result = lua_tointeger (L, -1);
-	printf ("Result of my_lua_function(5): %d\n", result);
-	lua_pop (L, 1);								//弹出返回值
+	//6.处理Lua 函数的返回值
+	tmp = lua_tointeger (L, -1);
+	printf ("Result of my_lua_func(5) = %d\n", tmp);
+	lua_pop (L, 1);//弹出返回值(表示返回值已读, 数据没用了, 命令lua 机丢弃该数据, 送进GC 中回收)
 
-	//7.关闭 Lua 状态: 完成操作后关闭 Lua 状态; 
+	//7.关闭Lua 状态
 	lua_close (L);
 	return 0;
 }
+
+
+

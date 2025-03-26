@@ -11,6 +11,11 @@ print(arg[0])
 --装载.so 共享链接库
 local getRandom = require "getRandom"
 
+--查看table of getRandom[]
+for k,v in ipairs(getRandom) do
+	print(k, v)
+end
+
 
 
 -- api list

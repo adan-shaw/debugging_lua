@@ -8,3 +8,5 @@ gcc -g3 -llua5.1 -ldl -lm -Wall -I/usr/include/lua5.1/ -L/usr/lib ./c_call_lua.c
 
 # 执行
 ./c_call_lua.exe
+
+rm ./c_call_lua.exe

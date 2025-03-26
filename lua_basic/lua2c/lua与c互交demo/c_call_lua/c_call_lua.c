@@ -1,111 +1,61 @@
-/*
- * c_call_lua.c
- *
- *  Created on: Sep 23, 2017
- *      Author: adan
- */
+//编译:
+//		gcc -g3 -I/home/tarball/luajit/include/luajit-2.1/ -L/home/tarball/luajit/lib -lluajit-5.1 ./c_call_lua.c -o ./c_call_lua.exe
+//		gcc -g3 -I/usr/include/lua5.1/ -L/usr/lib -llua ./c_call_lua.c -o ./c_call_lua.exe
 
-#include <stdarg.h>
+
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
 
-#include <dirent.h>
-#include <errno.h>
-#include "../../../extern_lib_install/lua/lua_so/lua534/src/lauxlib.h"
-#include "../../../extern_lib_install/lua/lua_so/lua534/src/lua.h"
-#include "../../../extern_lib_install/lua/lua_so/lua534/src/lualib.h"
 
-static int l_dir (lua_State * L)
+
+int main ()
 {
-
-	DIR *dir;
-
-	struct dirent *entry;
-
-	int i = 0;
-
-	//如果给定虚拟栈中索引处的元素可以转换为字符串, 则返回转换后的字符串, 否则报错
-	const char *path = luaL_checkstring (L, 1);
-
-	//open directory
-	dir = opendir (path);
-
-	if (dir == NULL)
-	{
-
-		lua_pushnil (L);						//出错返回"nil"
-		lua_pushstring (L, strerror (errno));	//加上一个描述错误信息的字符串
-		return 2;										//"nil"加上字符串, 共两个返回值...
-	}
-
-	//create result table
-	lua_newtable (L);
-
-	i = 1;
-
-	while ((entry = readdir (dir)) != NULL)
-	{															//逐一读取目录中的文件
-		lua_pushnumber (L, i++);		//push key
-		lua_pushstring (L, entry->d_name);	//push value
-		lua_settable (L, -3);				//t[k] = v
-	}
-
-	closedir (dir);								//关闭路径fd
-	return 1;											// 返回值只有一个, "table". 
-}
-
-//***********************************************************
-
-static int l_sin (lua_State * L)
-{
-
-	//如果给定虚拟栈中索引处的元素可以转换为数字, 则返回转换后的数字, 否则报错...
-	double d = luaL_checknumber (L, 1);
-
-	lua_pushnumber (L, sin (d));	//压入sin() 函数的结果到lua_stack 中
-
-	//c可以返回给lua 多个结果,通过多次调用lua_push*(), 之后return返回结果的数量, 让lua 自己pop n 次栈
-
-	return 1;											//返回的int 必须>=0, int 表示函数返回的结果的个数
-}
-
-int c_call_lua_test (void)
-{
-
-	//创建Lua状态机
+	//1.创建 Lua 状态: 首先需要创建一个 Lua 状态, 这是 Lua 运行时环境的基础; 
 	lua_State *L = luaL_newstate ();
+	luaL_openlibs (L);						//打开标准库
 
-	//打开Lua状态机"L"中的所有Lua标准库
-	luaL_openlibs (L);
+	//2.加载 Lua 脚本: 可以通过 luaL_dofile 或 luaL_dostring 等函数加载并执行 Lua 脚本; 
+	const char *script = "function my_lua_function(x) return x * 2 end";
+	if (luaL_dostring (L, script) != LUA_OK)
+	{
+		fprintf (stderr, "Lua script error: %s\n", lua_tostring (L, -1));
+		lua_pop (L, 1);
+		lua_close (L);
+		return -1;
+	}
 
-	/* 这两句话在lua 机的实验代码中有更简单的方法: lua_register(L, "mysin", l_sin)
-	 * 这句话将c 函数"l_sin"定义为lua 的全局变量"mysin", 实现的宏定义如下: 
-	 * #define lua_register(L,n,f) \
-	 *      (lua_pushcfunction(L, f), lua_setglobal(L, n))
-	 */
-	//
-	lua_pushcfunction (L, l_sin);	//将c 函数转换为lua 的"function"并压入虚拟栈
-	lua_setglobal (L, "mysin");		//弹出栈顶元素, 并在lua 中用名为"mysin"的全局变量存储
+	//3.获取 Lua 函数: 通过 lua_getglobal 获取全局 Lua 函数; 
+	lua_getglobal (L, "my_lua_function");
 
-	//测试mysin
-	const char *testfunc = "print(mysin(3.14 / 2))";
+	//4: 检查函数是否存在在调用之前, 检查函数是否存在, 以避免运行时错误; 
+	if (!lua_isfunction (L, -1))
+	{
+		fprintf (stderr, "Error: my_lua_function is not a function\n");
+		lua_pop (L, 1);
+		lua_close (L);
+		return -1;
+	}
 
-	if (luaL_dostring (L, testfunc))	//命令lua 执行lua 命令
-		printf ("Failed to invoke.\n");	//失败返回0=NULL=fail !!
+	//5.调用 Lua 函数: 使用 lua_pcall 调用 Lua 函数; 
+	lua_pushinteger (L, 5);				//设置参数为5
+	int status = lua_pcall (L, 1, 1, 0);//1 个参数, 1 个返回值, 0 个错误处理
+	if (status != LUA_OK)
+	{
+		fprintf (stderr, "Lua error: %s\n", lua_tostring (L, -1));
+		lua_pop (L, 1);
+		lua_close (L);
+		return -1;
+	}
 
-	//****************************
-	//将c 函数"l_dir"定义为lua 的全局变量"mydir"
-	lua_register (L, "mydir", l_dir);
+	//6.处理返回值: 处理 Lua 函数的返回值; 
+	int result = lua_tointeger (L, -1);
+	printf ("Result of my_lua_function(5): %d\n", result);
+	lua_pop (L, 1);								//弹出返回值
 
-	// 打印"/home/"目录下的所有文件. 
-	const char *testfunc2 = "for i, v in pairs(mydir('/home')) do print(i, v) end";
-
-	if (luaL_dostring (L, testfunc2))	//执行Lua命令
-		printf ("Failed to invoke.\n");
-
-	lua_close (L);								//关闭Lua状态机
-
+	//7.关闭 Lua 状态: 完成操作后关闭 Lua 状态; 
+	lua_close (L);
 	return 0;
-
 }

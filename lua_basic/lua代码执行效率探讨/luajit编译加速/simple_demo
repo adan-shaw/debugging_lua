@@ -1,0 +1,64 @@
+#
+# 1.lua/luajit 编译出二进制*.out 代码块
+#
+luajit 编译器和luac 不一样, lua 没有内置编译器, 因为Lua 不是jit, 
+但luajit 会内置编译器, 一边运行一边编译!! 这就是区别;
+因此luajit 编译文件, 和luac 是不一样的, 具体如下:
+
+# luajit(编译命令: -b)
+#luajit -b ./compile_test.lua ./compile_test.out
+luajit -O3 -b ./compile_test.lua ./compile_test.out
+lua ./compile_test.out
+
+# luac(编译命令: -o)
+luac -o compile_test.out ./compile_test.lua
+lua ./compile_test.out
+
+
+
+一般情况下, 编译出lua/luajit 编译出的二进制*.out 代码块, 有一定对抗反编译的能力;
+反编译时, 全局变量比较容易被反编译, function 内的local 局部变量, 反编译难度会稍微大一点, 也安全一点(但实际上也不是绝对安全的);
+
+
+
+
+
+#
+# 2.lua/luajit 命令执行*.out 代码块
+#
+lua 机在命令调用时, 可以直接装载luac.out, 例如: 
+	lua ./luac.out
+
+luajit 同理:
+	luajit ./luajit.out
+
+注意:
+	luac 编译出来的二进制码*.out, 不能和luajit 编译出来的*.out 通用;
+	甚至!! lua5.1/5.2/5.3/5.4 不同版本的*.out, 也是不能通用的, 谨记!!
+
+
+
+
+
+#
+# 3.lua/luajit 代码调用*.out 代码块
+#
+lua 机在代码调用时, 不可以直接装载luac.out, 装载demo 如下:
+	# 直接执行dofile()
+	dofile("./compile_test.out")
+
+	# dofile()的错误用法: -- dofile() 是直接执行的, 就不需要再使用local tmp = dofile() 了, 没意义!!
+	local tmp = dofile("./compile_test.out")
+
+
+
+
+
+	# readfile() & load() 一个函数都不能省, load() 不能直接装载chunk 块
+	local content = readfile("path/to/your/data.out")
+	local chunk = load(content)
+	chunk()
+
+	# load() 可以直接装载lua 字符串
+	local chunk = load("print(\"hello world\")")
+	chunk()

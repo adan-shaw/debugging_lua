@@ -1,0 +1,1 @@
+../luajit编译加速/compile_test.lua

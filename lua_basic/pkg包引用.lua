@@ -8,20 +8,28 @@
 
 
 	*2.require("") 命令中, '文件路径'可以由package.path / package.cpath 修改:
-			package.path 包含lua 源文件,
-			package.cpath 包含以lua标准封装的.so共享库文件(以lua标准封装的.so可以直接require 引用),
-		 '文件名'不能带有.lua 后缀, 例如:
-			引用test.lua 文件, 你应该写成: require("test")
+			package.path  包含lua 源文件的path;
+			package.cpath 包含*.so共享库文件(以lua标准封装的.so可以直接require 引用);
+		 '文件名'不能带有.lua/.so 后缀, 例如:
+				引用test.lua 文件: 
+					local t = require("test")
+				引用test.so 文件: 
+					local t = require("test")
 
 
 
-	*3.require("") 返回类型如果不是table, 是nil / string, 则会报错, 显示找不到文件(很烦)
+	*3.require("") 返回类型如果不是table, 是nil / string, 则表示require 执行失败, 会报错;
+			出错原因是: 
+				找不到文件, 这是一个常见错误;
+				请留意: package.path / package.cpath 的路径是否能找到*.lua / *.so / *.dll 文件, 找不到就会报错;
 
 
 
 	*4.打印package.path默认路径:
-		 io.write(package.path)
-		 io.write(package.cpath)
+		 print(package.path)
+		 print(package.cpath)
+		 //io.write(package.path) //触发io 模块打印, 可能会占用io 带宽, 尽量不用
+		 //io.write(package.cpath)
 
 		./?.lua;
 		/usr/local/share/lua/5.1/?.lua;
@@ -85,8 +93,15 @@ package.loaded["debug"] = nil
 
 
 
+--打印lua 库文件搜索路径
+print(package.path)
+print(package.cpath)
+
+
+
 --打印已装载的所有内建模块
 local ptab = require("print_tab").print_tab
 ptab(package.loaded)
+
 
 

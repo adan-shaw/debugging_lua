@@ -59,9 +59,9 @@ print("next() 非连续下标遍历")
 local size = 0
 local k, v = _G.next(t1)
 while k do
-    print(k, v)
-    size = size + 1
-    k, v = _G.next(t1, k)
+	print(k, v)
+	size = size + 1
+	k, v = _G.next(t1, k)
 end
 print(size)
 

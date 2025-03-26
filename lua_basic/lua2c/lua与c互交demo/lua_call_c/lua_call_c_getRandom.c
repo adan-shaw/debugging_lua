@@ -1,5 +1,9 @@
 //编译:
-//		gcc -Wall -fPIC -shared ./lua_call_c_getRandom.c -o ./lua_call_c_getRandom.so 
+//手动tarball: 略(未成功)
+//		gcc -g3 -lluajit-5.1 -ldl -lm -Wall -fPIC -shared  -I/home/tarball/luajit/include/luajit-2.1/ -L/home/tarball/luajit/lib ./lua_call_c_getRandom.c -o ./getRandom.so
+
+//安装依赖: apt-get install lua5.1 liblua5.1-0 liblua5.1-0-dbg liblua5.1-0-dev 
+//		gcc -g3 -llua5.1 -ldl -lm -Wall -fPIC -shared -I/usr/include/lua5.1/ -L/usr/lib ./lua_call_c_getRandom.c -o ./getRandom.so
 
 
 
@@ -7,10 +11,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-
-#include "/home/tarball/luajit/include/luajit-2.1/lua.h"
-#include "/home/tarball/luajit/include/luajit-2.1/lauxlib.h"
-#include "/home/tarball/luajit/include/luajit-2.1/lualib.h"
+#include <errno.h>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 
 
 
@@ -100,9 +104,10 @@ int get_xtime(lua_State *L){
 
 
 
-//注册本模块的所有c函数
+//注册函数的指示结构体luaL_Reg, 为注册函数提供指导, 告诉本模块有多少个c 函数需要提交到lua 机中运行;
+//最后一个元素为'哨兵元素', 两个"NULL"用于告诉Lua没有其他的函数需要注册了;
 //const struct luaL_Reg getRandom[] = {
-static const luaL_Reg getRandom[] = {
+static struct luaL_Reg getRandom[] = {
 	{"get_xrandom", get_xrandom},
 	{"get_x6random", get_x6random},
 	{"get_x6random2", get_x6random2},
@@ -112,6 +117,19 @@ static const luaL_Reg getRandom[] = {
 };
 
 //对外API: 允许lua 机调用本模块的API 注册函数
+/*
+此函数为lua_call_c 的关键函数, 通过调用它, 来注册所有C库中的函数, 并将它们存储在适当的位置;
+此函数的命名规则应遵循:
+	*1.使用"luaopen_"作为前缀;
+	*2.后缀名将作为"require"的参数;
+如:
+	*.c 中定义:
+		int luaopen_getRandom(lua_State* L);
+	*.lua 中调用:
+		local tmp = require(getRandom)
+	*.so 编译:
+		必须编译出./getRandom.so 文件名, 不能做任何修改
+*/
 int luaopen_getRandom(lua_State* L){
 	luaL_newlib(L, getRandom);
 	return 1;

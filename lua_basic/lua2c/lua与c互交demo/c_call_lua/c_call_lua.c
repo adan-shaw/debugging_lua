@@ -1,6 +1,6 @@
 //编译:
 //手动tarball: 略(未成功)
-//		gcc -g3 -I/home/tarball/luajit/include/luajit-2.1/ -L/home/tarball/luajit/lib -lluajit-5.1 -ldl -lm -Wall ./c_call_lua.c -o ./c_call_lua.exe
+//		gcc -g3 -lluajit-5.1 -ldl -lm -Wall  -I/home/tarball/luajit/include/luajit-2.1/ -L/home/tarball/luajit/lib ./c_call_lua.c -o ./c_call_lua.exe
 
 //安装依赖: apt-get install lua5.1 liblua5.1-0 liblua5.1-0-dbg liblua5.1-0-dev 
 //		gcc -g3 -llua5.1 -ldl -lm -Wall -I/usr/include/lua5.1/ -L/usr/lib ./c_call_lua.c -o ./c_call_lua.exe
@@ -41,7 +41,8 @@ int main (void)
 
 	//1.创建Lua 状态(首先需要创建一个Lua 状态, 这是Lua 运行时环境的基础)
 	lua_State *L = luaL_newstate ();
-	luaL_openlibs (L);						//打开标准库
+
+	luaL_openlibs (L);						//打开lua 的标准库
 
 	//2.加载Lua 脚本(可以通过luaL_dofile() 或luaL_dostring() 等函数加载并执行Lua 脚本)
 	if (luaL_dostring (L, script) != LUA_OK)
@@ -52,6 +53,7 @@ int main (void)
 		lua_close (L);
 		return -1;
 	}
+	//luaL_dofile(L, "my_lua_func.lua");//通过*.lua 文件, 获取my_lua_func() 函数
 
 	//3.获取Lua 函数(通过lua_getglobal 获取全局Lua 函数)
 	lua_getglobal (L, "my_lua_func");

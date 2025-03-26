@@ -1,8 +1,8 @@
 #!/bin/sh
 
-gcc -Wall -fPIC -shared ./lua_call_c_getRandom.c -o ./lua_call_c_getRandom.so 
+gcc -g3 -llua5.1 -ldl -lm -Wall -fPIC -shared -I/usr/include/lua5.1/ -L/usr/lib ./lua_call_c_getRandom.c -o ./getRandom.so
 
 lua ./lua_call_c_getRandom.lua
 luajit ./lua_call_c_getRandom.lua
 
-rm ./lua_call_c_getRandom.so 
+rm ./getRandom.so 

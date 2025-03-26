@@ -9,7 +9,7 @@ print(os.getenv("PWD"))
 print(arg[0])
 
 --装载.so 共享链接库
-local getRandom = require "lua_call_c_getRandom"
+local getRandom = require "getRandom"
 
 
 
